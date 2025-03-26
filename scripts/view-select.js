@@ -11,4 +11,5 @@ export function initViewSelect() {
             bubbles: true
         }));
     });
+
 }

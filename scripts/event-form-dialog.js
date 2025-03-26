@@ -14,6 +14,10 @@ export function initEventFormDialog() {
 
     dialog.dialogElement.addEventListener("close", () => {
         eventForm.reset();
-    })
+    });
+
+    eventForm.formElement.addEventListener("event-create", () => {
+        dialog.close();
+    });
 }
 
