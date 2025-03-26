@@ -45,6 +45,25 @@ export function subtractDays(date, days) {
     return addDays(date, -days);
 }
 
+export function generateMonthCalendarDays(currentDate) {
+    const calendarDays = [];
+
+    const lastDayOfPreviousMonthDate = getLastDayOfMonthDate(
+        subtractMonths(currentDate, 1)
+    );
+
+    const lastDayOfPreviousMonthWeekDay = lastDayOfPreviousMonthDate.getDay();
+    if (lastDayOfPreviousMonthWeekDay !== 6) {
+        for (let i = lastDayOfPreviousMonthWeekDay; i >= 0; i -= 1) {
+            const calendarDay = subtractDays(lastDayOfPreviousMonthDate, i);
+            calendarDays.push(calendarDay);
+        }
+    }
+
+
+    return calendarDays;
+}
+
 function getLastDayOfMonthDate(date) {
     return new Date(
         date.getFullYear(),
