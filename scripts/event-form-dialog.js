@@ -1,10 +1,17 @@
-import { intiDialog } from "./dialog.js";
-
+import { initDialog } from "./dialog.js";
+import { initEventForm } from "./event-form.js";
+ 
 export function initEventFormDialog() {
-    const dialog = intiDialog("event-form");
+    const dialog = initDialog("event-form");
+    const eventForm = initEventForm();
 
     document.addEventListener
     ("event-create-request", () => {
         dialog.open();
     });
+
+    dialog.dialogElement.addEventListener("close", () => {
+        eventForm.reset();
+    })
 }
+

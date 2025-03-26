@@ -1,6 +1,6 @@
 import { waitUntilAnimationsFinish } from "./animation.js";
 
-export function intiDialog(name) {
+export function initDialog(name) {
     const dialogElement = document.querySelector(`[data-dialog=${name}]`);
 
     const closeButtonElements = document.querySelectorAll("[data-dialog-close-button]");
@@ -36,6 +36,7 @@ export function intiDialog(name) {
     })
 
     return {
+        dialogElement,
         open() {
             dialogElement.showModal();
         },
