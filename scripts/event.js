@@ -10,6 +10,10 @@ export function initStaticEvent(parent, event) {
     parent.appendChild(eventElement);
 }
 
+export function initDynamicEvent() {
+    
+}
+
 function initEvent(event) {
     const eventContent = eventTemplateElement.content.cloneNode(true);
     const eventElement = eventContent.querySelector("[data-event]");
@@ -29,6 +33,10 @@ export function isEventAllDay(event) {
 
 export function eventStartBefore(eventA, eventB) {
     return eventA.startTime < eventB.startTime;
+}
+
+export function eventEndsBefore(eventA, eventB) {
+    return eventA.endTime < eventB.eventTime;
 }
 
 export function validateEvent(event) {

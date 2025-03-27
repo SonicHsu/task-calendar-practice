@@ -1,5 +1,5 @@
 import { generateWeekDays, isTheSameDay, today } from "./date.js";
-import { isEventAllDay } from "./event.js";
+import { isEventAllDay, eventStartBefore, eventEndsBefore } from "./event.js";
 import { initEventList } from "./event-list.js";
 
 const calendarTemplateElement = document.querySelector("[data-template='week-calendar']");
@@ -22,10 +22,13 @@ export function initWeekCalendar(parent, selectedDate, eventStore, isSingleDay) 
     for (const weekDay of weekDays) {
         const events = eventStore.getEventsByDate(weekDay);
         const allDayEvents = events.filter((event) => isEventAllDay(event));
+        const nonAllDayEvents = events.filter((event) => !isEventAllDay(event));
+
+        sortEventsByTime(nonAllDayEvents);
 
         initDayOfWeek(calendarDayOfWeekListElement, selectedDate, weekDay);
         initAllDayListItem(calendarAllDayListElement, allDayEvents);
-        initColumn(calendarColumnsElement, weekDay);
+        initColumn(calendarColumnsElement, weekDay, events);
     }
 
     if (isSingleDay) {
@@ -61,10 +64,46 @@ function initAllDayListItem(parent, events) {
     parent.appendChild(calendarAllDayListItemElement);
 }    
 
-function initColumn(parent, weekDay) {
+function initColumn(parent, weekDay, events) {
     const calendarColumnContent = calendarColumnTemplateElement.content.cloneNode(true);
     const calendarColumnElement = calendarColumnContent.querySelector("[data-week-calendar-column]");
     const calendarColumnCellElements = calendarColumnElement.querySelectorAll("[data-week-calendar-cell]");
 
+    const eventsWithDynamicStyles = calculateEventsDynamicStyles(events);
+    for (const eventWithDynamicStyles of eventsWithDynamicStyles) {
+        initDynamicEvent(
+            calendarColumnElement,
+            eventWithDynamicStyles.event,
+            eventWithDynamicStyles.styles
+        )
+    }
+
     parent.appendChild(calendarColumnElement);
+}
+
+function calculateEventsDynamicStyles(events) {
+    return events.map((event) => ({
+        event,
+        styles:{
+            top: "12.5%",
+            bottom: "0%",
+            left: "75%",
+            right: "0%"
+        }
+    }));
+}
+
+function sortEventsByTime(events) {
+    events.sort((eventA, eventB) => {
+        if (eventStartsBefore(eventA, eventB)) {
+            return -1;
+        }
+
+        if (eventStartsBefore(eventB, eventA)) {
+            return 1;
+        }
+
+        return eventEndsBefore(eventA, eventB) ? 1 : -1;
+    })
+
 }
