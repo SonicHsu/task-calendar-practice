@@ -1,27 +1,63 @@
-import { generateMonthCalendarDays } from "./date.js";
+import { generateMonthCalendarDays, today, isTheSameDay } from "./date.js";
+import { isEventAllDay, eventStartBefore }  from "./event.js";
+import { initEventList } from "./event-list.js";
 
 const calendarTemplateElement = document.querySelector("[data-template='month-calendar']");
 const calendarDayTemplateElement =document.querySelector("[data-template='month-calendar-day']");
 
-export function initMonthCalendar(parent, selectedDate) {
+const calendarWeekClasses = {
+    4: "four-week",
+    5: "five-week",
+    6: "six-week"
+}
+
+export function initMonthCalendar(parent, selectedDate, eventStore) {
     const calendarContent = calendarTemplateElement.content.cloneNode(true);
     const calendarElement = calendarContent.querySelector("[data-month-calendar]");
     const calendarDayListElement = calendarElement.querySelector("[data-month-calendar-day-list]");
 
     const calendarDays = generateMonthCalendarDays(selectedDate);
+    const calendarWeeks = calendarDays.length / 7;
+
+    const calendarWeekClass = calendarWeekClasses[calendarWeeks];
+    calendarElement.classList.add(calendarWeekClass);
+
     for (const calendarDay of calendarDays) {
-        initCalendarDay(calendarDayListElement, calendarDay);
+        const events = eventStore.getEventsByDate(calendarDay);
+        sortCalendarDayEvents(events);
+
+        initCalendarDay(calendarDayListElement, calendarDay, events);
     }
 
     parent.appendChild(calendarElement);
 }
 
-function initCalendarDay(parent, calendarDay) {
+function initCalendarDay(parent, calendarDay, events) {
     const calendarDayContent = calendarDayTemplateElement.content.cloneNode(true);
     const calendarDayElement =calendarDayContent.querySelector("[data-month-calendar-day]");
     const calendarDayLabelElement =calendarDayContent.querySelector("[data-month-calendar-day-label]");
 
+    if (isTheSameDay(today(), calendarDay)) {
+        calendarDayElement.classList.add("month-calendar__day--highlight");
+    }
+
     calendarDayLabelElement.textContent = calendarDay.getDate();
 
+    initEventList(calendarDayElement, events);
+
     parent.appendChild(calendarDayElement);
+}
+
+function sortCalendarDayEvents(events) {
+    events.sort((eventA, eventB) => {
+        if (isEventAllDay(eventA)) {
+            return -1;
+        }
+
+        if (isEventAllDay(eventB)) {
+            return 1;
+        }
+
+        return eventStartBefore(eventA, eventB) ? -1 : 1;
+    })
 }

@@ -1,10 +1,25 @@
-export function initEvnetStore() {
+import { isTheSameDay } from "./date.js"
+
+export function initEventStore() {
     document.addEventListener("event-create", (event) => {
         const createdEvent = event.detail.event;
-        const events = getEventFromLocalStorage();
+        const events = getEventsFromLocalStorage();
         events.push(createdEvent)
         saveEventIntoLocalStorage(events);
+
+        document.dispatchEvent(new CustomEvent("events-change", {
+            bubbles : true
+        }));
     });
+
+    return {
+        getEventsByDate(date) {
+            const events = getEventsFromLocalStorage() ;
+            const filteredEvents = events.filter((event) => isTheSameDay(event.date, date));
+
+            return filteredEvents;
+        }
+    };
 }
 
 function saveEventIntoLocalStorage(events) {
@@ -23,7 +38,7 @@ function saveEventIntoLocalStorage(events) {
     localStorage.setItem("events", stringifiedEvents);
 }
 
-function getEventFromLocalStorage() {
+function getEventsFromLocalStorage() {
     const localStorageEvents = localStorage.getItem("events");
     if (localStorageEvents === null) {
         return [];

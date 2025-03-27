@@ -26,7 +26,7 @@ export function addMonths(date, months) {
         dayOfMonth,
         date.getHours()
     );
- }
+}
 
 export function subtractMonths(date, months) {
     return addMonths(date, -months);
@@ -60,8 +60,25 @@ export function generateMonthCalendarDays(currentDate) {
         }
     }
 
+    const lastDayOfCurrentMonthDate = getLastDayOfMonthDate(currentDate);
+    for (let i = 1; i <= lastDayOfCurrentMonthDate.getDate(); i += 1) {
+        const calendarDay = addDays(lastDayOfPreviousMonthDate, i);
+        calendarDays.push(calendarDay);
+    }
+
+    const totalWeeks = Math.ceil(calendarDays.length / 7);
+    const totalDays = totalWeeks * 7;
+    const missingDayAmount = totalDays - calendarDays.length;
+    for (let i = 1; i <= missingDayAmount; i += 1) {
+        const calendarDay = addDays(lastDayOfCurrentMonthDate, i);
+        calendarDays.push(calendarDay);
+    }
 
     return calendarDays;
+}
+
+export function isTheSameDay(dateA, dateB) {
+    return dateA.getFullYear() === dateB.getFullYear() && dateA.getMonth() === dateB.getMonth() && dateA.getDate() === dateB.getDate();
 }
 
 function getLastDayOfMonthDate(date) {
