@@ -1,5 +1,5 @@
 import { generateMonthCalendarDays, today, isTheSameDay } from "./date.js";
-import { isEventAllDay, eventStartBefore }  from "./event.js";
+import { isEventAllDay, eventStartsBefore }  from "./event.js";
 import { initEventList } from "./event-list.js";
 
 const calendarTemplateElement = document.querySelector("[data-template='month-calendar']");
@@ -58,6 +58,6 @@ function sortCalendarDayEvents(events) {
             return 1;
         }
 
-        return eventStartBefore(eventA, eventB) ? -1 : 1;
+        return eventStartsBefore(eventA, eventB) ? -1 : 1;
     })
 }
