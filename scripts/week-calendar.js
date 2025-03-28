@@ -94,7 +94,7 @@ function calculateEventsDynamicStyles(events) {
     const initialEventGroupItems = [];
 
     for (const eventGroup of eventGroups) {
-        for(const eventGroupItem of eventGroup) {
+        for (const eventGroupItem of eventGroup) {
             if (eventGroupItem.isInitial) {
                 initialEventGroupItems.push(eventGroupItem);
             }
@@ -124,7 +124,7 @@ function groupEvents(events) {
         return { eventGroups: [], totalColumns: 0 };
     }
 
-    const firstEventGroup =[
+    const firstEventGroup = [
         {
             event: events[0],
             columnIndex: 0,
@@ -213,7 +213,7 @@ function groupEvents(events) {
                 loopEventGroupItem.columnSpan = totalColumns - loopEventGroupItem.columnIndex;
             } else {
                 const nextLoopEventGroupItem = eventGroup[i + 1];
-                loopEventGroupItem.columnSpan = nextLoopEventGroupItem.columnIndex -loopEventGroupItem.columnIndex;
+                loopEventGroupItem.columnSpan = nextLoopEventGroupItem.columnIndex - loopEventGroupItem.columnIndex;
             }
         }
     }
@@ -228,10 +228,6 @@ function groupEvents(events) {
                 }
             }
         }
-    }
-
-    for (let i = 0; i < events.length; i += 1) {
-        let lowestColumnSpan = Infinity;
 
         for (const eventGroup of eventGroups) {
             for (const eventGroupItem of eventGroup) {
@@ -242,8 +238,8 @@ function groupEvents(events) {
         }
     }
 
-    return { eventGroups, totalColumns};
- }
+    return { eventGroups, totalColumns };
+}
 
 function sortEventsByTime(events) {
     events.sort((eventA, eventB) => {
