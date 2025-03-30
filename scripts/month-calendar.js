@@ -36,12 +36,40 @@ function initCalendarDay(parent, calendarDay, events) {
     const calendarDayContent = calendarDayTemplateElement.content.cloneNode(true);
     const calendarDayElement =calendarDayContent.querySelector("[data-month-calendar-day]");
     const calendarDayLabelElement =calendarDayContent.querySelector("[data-month-calendar-day-label]");
+    const calendarEventListWrapper = calendarDayElement.querySelector("[data-month-calendar-event-list-wrapper]");
 
     if (isTheSameDay(today(), calendarDay)) {
         calendarDayElement.classList.add("month-calendar__day--highlight");
     }
 
     calendarDayLabelElement.textContent = calendarDay.getDate();
+
+    calendarDayLabelElement.addEventListener("click", () => {
+        document.dispatchEvent(new CustomEvent("date-change", {
+            detail: {
+                date: calendarDay
+            },
+            bubbles: true
+        }));
+
+        document.dispatchEvent(new CustomEvent("view-change", {
+            detail: {
+                view: 'day'
+            },
+            bubbles: true
+        }) )
+    })
+
+    calendarEventListWrapper.addEventListener("click", () => {
+        document.dispatchEvent(new CustomEvent("event-create-request", {
+            detail:{
+                date: calendarDay,
+                startTime: 600,
+                endTime: 960
+            },
+            bubbles: true
+        }))
+    })
 
     initEventList(calendarDayElement, events);
 

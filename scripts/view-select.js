@@ -12,4 +12,7 @@ export function initViewSelect() {
         }));
     });
 
+    document.addEventListener("view-change", (event) => {
+        viewSelectElement.value = event.detail.view;
+    });
 }
