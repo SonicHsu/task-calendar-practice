@@ -71,7 +71,7 @@ function refreshDayListElement(parent, miniCalendarDate, selectedDate) {
         calendarDayElement.textContent = calendarDay.getDate();
 
         if (miniCalendarDate.getMonth() !== calendarDay.getMonth()) {
-            calendarDayElement.classList.add("[mini-calendar__day--other]");
+            calendarDayElement.classList.add("mini-calendar__day--other");
         }
 
         if (isTheSameDay(selectedDate, calendarDay)) {
