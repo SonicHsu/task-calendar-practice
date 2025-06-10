@@ -33,6 +33,7 @@
 git clone https://github.com/你的帳號/task-calendar-practice.git
 cd task-calendar-practice
 # 直接打開 index.html 即可執行（無需額外安裝）
+```
 ---
 
 ## 📌 備註
